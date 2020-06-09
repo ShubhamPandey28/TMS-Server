@@ -38,7 +38,14 @@ def insert(kwargs):
     cursor.close()
 
 
+def show():
+    cursor = connection.cursor()
+    cursor.execute("SELECT * FROM cities;")
+    result = cursor.fetchall()
+    cursor.close()
+    return result
 
-__all__ = [insert, connection, dev_path, mysql_config, PrimaryKeyAlreadyExistsError]
+
+__all__ = [insert, connection, dev_path, mysql_config, PrimaryKeyAlreadyExistsError, show]
 
 
