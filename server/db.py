@@ -20,8 +20,11 @@ class PrimaryKeyAlreadyExistsError(connector.Error):
     pass
 
 
-def insert_one(table_name, value):
-    
+def insert_one(table_data):
+
+    table_name = table_data['table_name']
+    value = table_data['value']
+
     cursor = connection.cursor()
     
     try:
@@ -38,13 +41,14 @@ def insert_one(table_name, value):
 
 
 def insert(table_datas):
+    '''
+        inserts tuple in databases.
+        this is separated from insert_one because of future error handling if one table for eg.
+        we are able to insert in one table and other table results in insertion error.
+    '''
     
     for table_data in table_datas:
-
-        table_name = table_data['table_name']
-        value = table_data['value']
-
-        insert_one(table_name, value)
+        insert_one(table_data)
     
 
 
