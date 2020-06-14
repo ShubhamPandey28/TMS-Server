@@ -13,16 +13,26 @@ api = Api(app)
 
 parser = reqparse.RequestParser()
 
-schema = ['city_id', 'city_name', 'city_state']
+parser.add_argument('data', action='append')
 
-for i in schema:
-    parser.add_argument(i)
+
+def insert_arg_parse():
+    args = parser.parse_args()
+
+    table_datas = []
+
+    for string_data in args['data']:
+        table_data = json.loads(string_data)
+        table_datas.append(table_data)
+    
+    return table_datas
 
 
 class base(Resource):
 
     def get(self):
-        response = {'result':show()}
+        table_name = parser.parse_args()['data']
+        response = {'result':{table_name:show('cities')}}
         response = jsonify(response)
         response.status_code = 202
         return response
@@ -30,13 +40,13 @@ class base(Resource):
     
     def post(self):
         
-        args = parser.parse_args()
-        
+        table_datas = insert_arg_parse()
+
         response = jsonify({'reason':'bad-request'})
         response.status_code = 400
 
         try:
-            insert(args)
+            insert(table_datas)
             response = jsonify({'reason':'success'})
             response.status_code = 202
 

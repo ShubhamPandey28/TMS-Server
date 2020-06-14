@@ -20,27 +20,39 @@ class PrimaryKeyAlreadyExistsError(connector.Error):
     pass
 
 
-
-def insert(kwargs):
+def insert_one(table_name, value):
     
     cursor = connection.cursor()
     
     try:
         cursor.execute(f'''
-            INSERT INTO cities ({", ".join(list(kwargs.keys()))}) VALUES ({", ".join(list(kwargs.values()))});
+            INSERT INTO {table_name} ({", ".join(list(value.keys()))}) VALUES ({", ".join(list(value.values()))});
         ''')
-        connection.commit()
-    
+        
     except connector.Error as err:
         if err.errno == 1062:
             raise PrimaryKeyAlreadyExistsError('The `city_id` you are trying to insert is already present in the table.')
-
+    
+    connection.commit()
     cursor.close()
 
 
-def show():
+def insert(table_datas):
+    
+    for table_data in table_datas:
+
+        table_name = table_data['table_name']
+        value = table_data['value']
+
+        insert_one(table_name, value)
+    
+
+
+def show(table_name):
     cursor = connection.cursor()
-    cursor.execute("SELECT * FROM cities;")
+    cursor.execute(f'''
+        SELECT * FROM {table_name};
+    ''')
     result = cursor.fetchall()
     cursor.close()
     return result

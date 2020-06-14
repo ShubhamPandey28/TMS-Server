@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS `cities` (
   `city_name` varchar(100) NOT NULL,
   `city_state` varchar(100) NOT NULL,
   PRIMARY KEY  (`city_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1624 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1624 ;
 
 --
 -- Dumping data for table `cities`

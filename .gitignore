@@ -2,4 +2,5 @@ __pycache__
 Pipfile
 Pipfile.lock
 test.py
+test_db.py
 mysql_config.json
