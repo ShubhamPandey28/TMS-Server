@@ -32,7 +32,7 @@ class base(Resource):
 
     def get(self):
         table_name = parser.parse_args()['data']
-        response = {'result':{table_name:show('cities')}}
+        response = {'result':show('cities')}
         response = jsonify(response)
         response.status_code = 202
         return response
