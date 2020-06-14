@@ -22,6 +22,10 @@ class PrimaryKeyAlreadyExistsError(connector.Error):
 
 def insert_one(table_data):
 
+    '''
+        table_data :    datatype - dict(table_name: string, value: dict)             
+    '''
+
     table_name = table_data['table_name']
     value = table_data['value']
 
@@ -41,15 +45,17 @@ def insert_one(table_data):
 
 
 def insert(table_datas):
+    
     '''
         inserts tuple in databases.
         this is separated from insert_one because of future error handling if one table for eg.
         we are able to insert in one table and other table results in insertion error.
+
+        table_datas : list(table_data)
     '''
     
     for table_data in table_datas:
-        insert_one(table_data)
-    
+        insert_one(table_data)    
 
 
 def show(table_name):
