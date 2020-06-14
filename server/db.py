@@ -40,8 +40,9 @@ def insert_one(table_data):
         if err.errno == 1062:
             raise PrimaryKeyAlreadyExistsError('The `city_id` you are trying to insert is already present in the table.')
     
-    connection.commit()
-    cursor.close()
+    finally:
+        connection.commit()
+        cursor.close()
 
 
 def insert(table_datas):

@@ -14,7 +14,7 @@ api = Api(app)
 parser = reqparse.RequestParser()
 
 parser.add_argument('data', action='append')
-
+parser.add_argument('table_name')
 
 def insert_arg_parse():
     args = parser.parse_args()
@@ -31,8 +31,8 @@ def insert_arg_parse():
 class base(Resource):
 
     def get(self):
-        table_name = parser.parse_args()['data']
-        response = {'result':show('cities')}
+        table_name = parser.parse_args()['table_name']
+        response = {'result':show(table_name)}
         response = jsonify(response)
         response.status_code = 202
         return response
