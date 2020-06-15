@@ -20,27 +20,50 @@ class PrimaryKeyAlreadyExistsError(connector.Error):
     pass
 
 
+def insert_one(table_data):
 
-def insert(kwargs):
-    
+    '''
+        table_data :    datatype - dict(table_name: string, value: dict)             
+    '''
+
+    table_name = table_data['table_name']
+    value = table_data['value']
+
     cursor = connection.cursor()
     
     try:
         cursor.execute(f'''
-            INSERT INTO cities ({", ".join(list(kwargs.keys()))}) VALUES ({", ".join(list(kwargs.values()))});
+            INSERT INTO {table_name} ({", ".join(list(value.keys()))}) VALUES ({", ".join(list(value.values()))});
         ''')
-        connection.commit()
-    
+        
     except connector.Error as err:
         if err.errno == 1062:
             raise PrimaryKeyAlreadyExistsError('The `city_id` you are trying to insert is already present in the table.')
+    
+    finally:
+        connection.commit()
+        cursor.close()
 
-    cursor.close()
+
+def insert(table_datas):
+    
+    '''
+        inserts tuple in databases.
+        this is separated from insert_one because of future error handling if one table for eg.
+        we are able to insert in one table and other table results in insertion error.
+
+        table_datas : list(table_data)
+    '''
+    
+    for table_data in table_datas:
+        insert_one(table_data)    
 
 
-def show():
+def show(table_name):
     cursor = connection.cursor()
-    cursor.execute("SELECT * FROM cities;")
+    cursor.execute(f'''
+        SELECT * FROM {table_name};
+    ''')
     result = cursor.fetchall()
     cursor.close()
     return result
