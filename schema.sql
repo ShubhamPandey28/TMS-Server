@@ -5,12 +5,11 @@ CREATE DATABASE `SG_TMS`;
 USE `SG_TMS`; 
 
 CREATE TABLE `Vehicle` (
-  `Vehicle_ID` int NOT NULL AUTO_INCREMENT,
-  `Vehicle_Num` varchar(50) NOT NULL,  
+  `Num` varchar(50),  
   `Model` varchar(50) NOT NULL,
-  `Current_Location` varchar(50) NOT NULL,
-  `Status` varchar(50) NOT NULL,
-  PRIMARY KEY (`Vehicle_ID`)
+  `Current_Location` varchar(50),
+  `Status` varchar(50) DEFAULT "IDLE",
+  PRIMARY KEY (`NUM`)
 );
 
 CREATE TABLE `Consignor_Consignee` (
@@ -18,31 +17,34 @@ CREATE TABLE `Consignor_Consignee` (
   `Name` varchar(50) NOT NULL,
   `Contact` varchar(50) NOT NULL,
   `Address` varchar(50) NOT NULL,
-  `Email` varchar(50) NOT NULL,
+  `Email` varchar(50) DEFAULT NULL,
+  `GST_Number` varchar(15) NOT NULL UNIQUE,
   PRIMARY KEY (`ID`)
 );
 
 
 CREATE TABLE `Consignment` (
-  `Consignment_ID` varchar(50) NOT NULL,
+  `ID` varchar(50) NOT NULL,
   `Consignor_ID` int NOT NULL,
   `Consignee_ID` int NOT NULL,
-  `Vehicle_ID` int NOT NULL,
-  `Loading_Date` date NOT NULL,
+  `Vehicle_Num` varchar(10) DEFAULT NULL,
+  `Loading_Date` date DEFAULT NULL,
   `To` varchar(50) NOT NULL,
   `From` varchar(50) NOT NULL,
   `Weight` float NOT NULL,
   `Rate` float default NULL,
   `Misc_Charges` float default NULL,
   `Amount` float default NULL,
-  `Chargeable_Qty` int default NULL,
+  `Chargeable_Qty` float default NULL,
   `Invoice_No.` int NOT NULL,
   `Invoice_Date` date NOT NULL,
+  `Invoice_Qty` float NOT NULL,
+  `Bill_Num` varchar(20) DEFAULT NULL,
   
   FOREIGN KEY (`Consignor_ID`) references `Consignor_Consignee`(`ID`),
   FOREIGN KEY (`Consignee_ID`) REFERENCES `Consignor_Consignee`(`ID`),
-  FOREIGN KEY (`Vehicle_ID`) REFERENCES `Vehicle`(`Vehicle_ID`),
-  PRIMARY KEY (`Consignment_ID`)
+  FOREIGN KEY (`Vehicle_NUM`) REFERENCES `Vehicle`(`NUM`),
+  PRIMARY KEY (`ID`)
 );
 
 CREATE TABLE `Repair_Log` (
@@ -54,3 +56,11 @@ CREATE TABLE `Repair_Log` (
   FOREIGN KEY (`Vehicle_ID`) REFERENCES `Vehicle`(`Vehicle_ID`),
   PRIMARY KEY (`Repair_ID`)
 );
+
+CREATE TABLE `Bills` (
+  `Num` varchar(20),
+  `Consignments` int NOT NULL,
+  `BIll_Date` date NOT NULL,
+  `Amount` varchar(50) NOT NULL,
+  PRIMARY KEY (`Num`)
+)
