@@ -13,50 +13,51 @@ api = Api(app)
 
 parser = reqparse.RequestParser()
 
-parser.add_argument('data', action='append')
-parser.add_argument('table_name')
+parser.add_argument("data", action="append")
 
 def insert_arg_parse():
     args = parser.parse_args()
 
     table_datas = []
 
-    for string_data in args['data']:
+    for string_data in args["data"]:
         table_data = json.loads(string_data)
         table_datas.append(table_data)
-    
+
     return table_datas
 
 
 class base(Resource):
+    # to_disp : dict of table columns with val: true for 
+    # cols to be displayed
+    # eg to_disp = {'col1' = True, 'col2' = False, col3 = 'True'}
+    def get(self, table_name):
+        to_disp = insert_arg_parse()[0]
 
-    def get(self):
-        table_name = parser.parse_args()['table_name']
-        response = {'result':show(table_name)}
+        response = {'result':show(table_name, to_disp)}
         response = jsonify(response)
         response.status_code = 202
         return response
-    
-    
-    def post(self):
-        
+
+    def post(self, table_name):
+
         table_datas = insert_arg_parse()
 
-        response = jsonify({'reason':'bad-request'})
+        response = jsonify({"reason": "bad-request"})
         response.status_code = 400
 
         try:
-            insert(table_datas)
-            response = jsonify({'reason':'success'})
+            insert(table_name, table_datas)
+            response = jsonify({"reason": "success"})
             response.status_code = 202
 
         except PrimaryKeyAlreadyExistsError:
-            response = jsonify({'reason':'primary-key-already-exists'})
+            response = jsonify({"reason": "primary-key-already-exists"})
             response.status_code = 409
 
         return response
 
 
-api.add_resource(base, '/') 
+api.add_resource(base, "/<string:table_name>")
 
 __all__ = [app, api]
