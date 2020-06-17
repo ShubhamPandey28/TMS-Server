@@ -68,6 +68,15 @@ def show(table_name):
     cursor.close()
     return result
 
+def get_client_consignments(client_name):
+    cursor = connection.cursor()
+    cursor.execute(f'''
+        SELECT t1.Consignment_ID FROM Consignment as t1 INNER JOIN Consignor_Consignee as t2 ON t1.Consignor_ID = t2.ID OR t1.Consignee_ID = t2.ID WHERE t2.name = '{client_name}'; 
+    ''')
+    result = list(set(cursor.fetchall()))
+    cursor.close()
+    return result
+
 
 __all__ = [insert, connection, dev_path, mysql_config, PrimaryKeyAlreadyExistsError, show]
 
