@@ -49,7 +49,7 @@ CREATE TABLE `Consignment` (
 
 CREATE TABLE `Repair_Log` (
   `ID` int NOT NULL auto_increment,
-  `Vehicle_Num` int NOT NULL,
+  `Vehicle_Num` varchar(10) NOT NULL,
   `Repair_Date` date NOT NULL,
   `Amount` varchar(50) NOT NULL,
   `From` varchar(50) NOT NULL,
