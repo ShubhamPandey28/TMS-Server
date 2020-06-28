@@ -15,7 +15,7 @@ CREATE TABLE `Vehicle` (
 CREATE TABLE `Consignor_Consignee` (
   `ID` int NOT NULL auto_increment,
   `Name` varchar(50) NOT NULL,
-  `Contact` varchar(50) NOT NULL,
+  `Contact` BIGINT NOT NULL,
   `Address` varchar(50) NOT NULL,
   `Email` varchar(50) DEFAULT NULL,
   `GST_Number` varchar(15) NOT NULL UNIQUE,
@@ -63,4 +63,4 @@ CREATE TABLE `Bills` (
   `BIll_Date` date NOT NULL,
   `Amount` varchar(50) NOT NULL,
   PRIMARY KEY (`Num`)
-)
+);
