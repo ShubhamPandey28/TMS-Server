@@ -63,4 +63,4 @@ CREATE TABLE `Bills` (
   `BIll_Date` date NOT NULL,
   `Amount` varchar(50) NOT NULL,
   PRIMARY KEY (`Num`)
-)
+);
